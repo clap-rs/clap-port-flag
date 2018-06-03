@@ -1,0 +1,14 @@
+[package]
+name = "clap-port-flag"
+version = "0.1.0"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/rust-clique/clap-port-flag"
+documentation = "https://docs.rs/clap-port-flag"
+description = "Easily add a --port flag to CLIs using Structopt"
+authors = ["Yoshua Wuyts <yoshuawuyts@gmail.com>"]
+readme = "README.md"
+
+[dependencies]
+structopt = "0.2.8"
+
+[dev-dependencies]
