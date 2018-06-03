@@ -59,4 +59,15 @@ impl Port {
       _ => Err(io::Error::new(io::ErrorKind::Other, "No port supplied.")),
     }
   }
+
+  /// Create a TCP socket by calling to `.bind()`. If it fails, create a socket
+  /// on `port`.
+  ///
+  /// Useful to create a default socket to listen to if none was passed.
+  pub fn bind_or(&self, port: u16) -> std::io::Result<TcpListener> {
+    match self.bind() {
+      Ok(listener) => Ok(listener),
+      Err(_) => TcpListener::bind(("127.0.0.1", port)),
+    }
+  }
 }
