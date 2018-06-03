@@ -13,5 +13,6 @@ struct Cli {
 
 fn main() {
   let args = Cli::from_args();
-  let _tcp_listener = args.port.bind().unwrap();
+  let tcp_listener = args.port.bind().unwrap();
+  println!("{:?}", tcp_listener);
 }

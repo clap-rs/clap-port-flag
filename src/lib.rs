@@ -50,7 +50,7 @@ impl Port {
       Self { fd: Some(fd), .. } => unsafe { Ok(TcpListener::from_raw_fd(*fd)) },
       Self {
         port: Some(port), ..
-      } => TcpListener::bind(("*", *port)),
+      } => TcpListener::bind(("127.0.0.1", *port)),
       _ => Err(io::Error::new(io::ErrorKind::Other, "No port supplied.")),
     }
   }
