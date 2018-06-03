@@ -32,6 +32,11 @@ fn main() {
 $ cargo add clap-port-flag
 ```
 
+## Acknowledgements
+The original version of this crate was sketched out by
+[@TeXitoi](https://github.com/TeXitoi) in
+[rust-lang-nursery/cli-wg#37](https://github.com/rust-lang-nursery/cli-wg/issues/37).
+
 ## License
 [MIT](./LICENSE-MIT) OR [Apache-2.0](./LICENSE-APACHE)
 
