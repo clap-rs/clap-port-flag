@@ -37,7 +37,7 @@ dependencies = [
 
 [[package]]
 name = "clap-port-flag"
-version = "0.1.1"
+version = "0.1.2-alpha.0"
 dependencies = [
  "structopt 0.2.8 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
