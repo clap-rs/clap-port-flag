@@ -1,11 +1,16 @@
 language: rust
-rust:
-  - nightly
 
-before_script: |
-  rustup component add rustfmt-preview
-script: |
-  cargo fmt -- --check &&
-  cargo build --verbose &&
-  cargo test  --verbose
+matrix:
+  include:
+  - env: RUSTCHECK
+    rust: 1.27.0  # `stable`: Locking down for consistent behavior
+    script:
+    - cargo check --tests
+  - env: RUSTFMT
+    rust: 1.27.0  # `stable`: Locking down for consistent behavior
+    install:
+    - rustup component add rustfmt-preview
+    script:
+    - cargo fmt -- --write-mode=diff
+
 cache: cargo
