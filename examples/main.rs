@@ -11,8 +11,9 @@ struct Cli {
   port: Port,
 }
 
-fn main() {
+fn main() -> Result<(), std::io::Error> {
   let args = Cli::from_args();
-  let tcp_listener = args.port.bind().unwrap();
+  let tcp_listener = args.port.bind()?;
   println!("{:?}", tcp_listener);
+  Ok(())
 }
