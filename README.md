@@ -32,6 +32,10 @@ fn main() {
 $ cargo add clap-port-flag
 ```
 
+## Further Reading
+- [WhatWG URL spec](https://url.spec.whatwg.org/)
+- [nodejs.org/api/url](https://nodejs.org/api/url.html)
+
 ## Acknowledgements
 The original version of this crate was sketched out by
 [@TeXitoi](https://github.com/TeXitoi) in
