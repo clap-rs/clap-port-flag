@@ -31,6 +31,8 @@ use std::os::unix::io::FromRawFd;
 /// ```
 #[derive(StructOpt, Debug)]
 pub struct Port {
+  #[structopt(short = "H", long = "hostname", default_value = "127.0.0.1")]
+  hostname: String,
   #[structopt(short = "p", long = "port", env = "PORT", group = "bind")]
   port: Option<u16>,
   #[structopt(long = "file-descriptor", env = "LISTEN_FD", group = "bind")]
@@ -41,7 +43,7 @@ pub struct Port {
 ///
 /// ## Panics
 /// If a file descriptor Was passed directly, we call the unsafe
-/// `TcpListener::from_raw_fd()` method, which may panic if a non-existant file
+/// `TcpListener::from_raw_fd()` method, which may panic if a non-existent file
 /// descriptor was passed.
 impl Port {
   /// Create a TCP socket from the passed in port or file descriptor.
@@ -50,7 +52,7 @@ impl Port {
       Self { fd: Some(fd), .. } => unsafe { Ok(TcpListener::from_raw_fd(*fd)) },
       Self {
         port: Some(port), ..
-      } => TcpListener::bind(("127.0.0.1", *port)),
+      } => TcpListener::bind((self.hostname.as_str(), *port)),
       _ => Err(io::Error::new(io::ErrorKind::Other, "No port supplied.")),
     }
   }
