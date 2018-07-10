@@ -65,9 +65,8 @@ impl Port {
   ///
   /// Useful to create a default socket to listen to if none was passed.
   pub fn bind_or(&self, port: u16) -> std::io::Result<TcpListener> {
-    match self.bind() {
-      Ok(listener) => Ok(listener),
-      Err(_) => TcpListener::bind((self.hostname.as_str(), port)),
-    }
+    self
+      .bind()
+      .or_else(|_| TcpListener::bind((self.hostname.as_str(), port)))
   }
 }
