@@ -8,6 +8,8 @@ Easily add a `--port` flag to CLIs using Structopt.
 - [Crates.io][2]
 
 ## Usage
+With the following code in `src/main.rs`:
+
 ```rust
 extern crate clap_port_flag;
 #[macro_use] extern crate structopt;
@@ -25,6 +27,26 @@ fn main() {
   let args = Cli::from_args();
   let _tcp_listener = args.port.bind().unwrap();
 }
+```
+
+When you run the binary, it'll provide the following output:
+
+```txt
+my-cool-app 0.2.0
+Alice Person <alice@person.com>
+Application that does things over TCP.
+
+USAGE:
+    main [OPTIONS]
+
+FLAGS:
+    -h, --help       Prints help information
+    -V, --version    Prints version information
+
+OPTIONS:
+        --listen-fd <fd>         A previously opened network socket. [env: LISTEN_FD=]
+    -H, --hostname <hostname>    The hostname to listen to. [default: 127.0.0.1]
+    -p, --port <port>            The network port to listen to. [env: PORT=]
 ```
 
 ## Installation
