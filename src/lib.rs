@@ -31,17 +31,22 @@ use std::os::unix::io::FromRawFd;
 /// ```
 #[derive(StructOpt, Debug)]
 pub struct Port {
+  /// The hostname to listen to.
+  #[structopt(short = "H", long = "hostname", default_value = "127.0.0.1")]
+  hostname: String,
+  /// The network port to listen to.
   #[structopt(short = "p", long = "port", env = "PORT", group = "bind")]
   port: Option<u16>,
-  #[structopt(long = "file-descriptor", env = "LISTEN_FD", group = "bind")]
+  /// A previously opened network socket.
+  #[structopt(long = "listen-fd", env = "LISTEN_FD", group = "bind")]
   fd: Option<c_int>,
 }
 
 /// Create a TCP socket.
 ///
 /// ## Panics
-/// If a file descriptor Was passed directly, we call the unsafe
-/// `TcpListener::from_raw_fd()` method, which may panic if a non-existant file
+/// If a file descriptor was passed directly, we call the unsafe
+/// `TcpListener::from_raw_fd()` method, which may panic if a non-existent file
 /// descriptor was passed.
 impl Port {
   /// Create a TCP socket from the passed in port or file descriptor.
@@ -50,7 +55,7 @@ impl Port {
       Self { fd: Some(fd), .. } => unsafe { Ok(TcpListener::from_raw_fd(*fd)) },
       Self {
         port: Some(port), ..
-      } => TcpListener::bind(("*", *port)),
+      } => TcpListener::bind((self.hostname.as_str(), *port)),
       _ => Err(io::Error::new(io::ErrorKind::Other, "No port supplied.")),
     }
   }
