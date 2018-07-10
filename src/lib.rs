@@ -67,7 +67,7 @@ impl Port {
   pub fn bind_or(&self, port: u16) -> std::io::Result<TcpListener> {
     match self.bind() {
       Ok(listener) => Ok(listener),
-      Err(_) => TcpListener::bind(("127.0.0.1", port)),
+      Err(_) => TcpListener::bind((self.hostname.as_str(), port)),
     }
   }
 }
