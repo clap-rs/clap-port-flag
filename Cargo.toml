@@ -4,7 +4,7 @@ version = "0.1.2-alpha.0"
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/rust-clique/clap-port-flag"
 documentation = "https://docs.rs/clap-port-flag"
-description = "Easily add a --port flag to CLIs using Structopt"
+description = "Easily add a --port flag to CLIs using Structopt."
 authors = ["Yoshua Wuyts <yoshuawuyts@gmail.com>"]
 readme = "README.md"
 
