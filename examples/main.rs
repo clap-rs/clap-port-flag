@@ -1,8 +1,9 @@
 extern crate clap_port_flag;
-#[macro_use] extern crate structopt;
+#[macro_use]
+extern crate structopt;
 
-use structopt::StructOpt;
 use clap_port_flag::Port;
+use structopt::StructOpt;
 
 #[derive(Debug, StructOpt)]
 struct Cli {
