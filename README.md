@@ -45,7 +45,7 @@ FLAGS:
 
 OPTIONS:
         --listen-fd <fd>         A previously opened network socket. [env: LISTEN_FD=]
-    -a, --address <hostname>     The network hostname to listen to. [default: 127.0.0.1]
+    -a, --address <hostname>     The network address to listen to. [default: 127.0.0.1]
     -p, --port <port>            The network port to listen to. [env: PORT=]
 ```
 
