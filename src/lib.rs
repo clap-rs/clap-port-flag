@@ -31,9 +31,9 @@ use std::os::unix::io::FromRawFd;
 /// ```
 #[derive(StructOpt, Debug)]
 pub struct Port {
-  /// The hostname to listen to.
-  #[structopt(short = "H", long = "hostname", default_value = "127.0.0.1")]
-  hostname: String,
+  /// The network address to listen to.
+  #[structopt(short = "a", long = "address", default_value = "127.0.0.1")]
+  address: String,
   /// The network port to listen to.
   #[structopt(short = "p", long = "port", env = "PORT", group = "bind")]
   port: Option<u16>,
@@ -55,7 +55,7 @@ impl Port {
       Self { fd: Some(fd), .. } => unsafe { Ok(TcpListener::from_raw_fd(*fd)) },
       Self {
         port: Some(port), ..
-      } => TcpListener::bind((self.hostname.as_str(), *port)),
+      } => TcpListener::bind((self.address.as_str(), *port)),
       _ => Err(io::Error::new(io::ErrorKind::Other, "No port supplied.")),
     }
   }
