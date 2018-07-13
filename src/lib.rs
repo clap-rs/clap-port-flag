@@ -67,6 +67,6 @@ impl Port {
   pub fn bind_or(&self, port: u16) -> std::io::Result<TcpListener> {
     self
       .bind()
-      .or_else(|_| TcpListener::bind((self.hostname.as_str(), port)))
+      .or_else(|_| TcpListener::bind((self.address.as_str(), port)))
   }
 }
