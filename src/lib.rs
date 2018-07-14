@@ -7,7 +7,7 @@
 extern crate structopt;
 
 use std::io;
-use std::net::TcpListener;
+use std::net::{TcpListener, UdpSocket};
 use std::os::raw::c_int;
 use std::os::unix::io::FromRawFd;
 
@@ -50,7 +50,7 @@ pub struct Port {
 /// descriptor was passed.
 impl Port {
   /// Create a TCP socket from the passed in port or file descriptor.
-  pub fn bind(&self) -> std::io::Result<TcpListener> {
+  pub fn tcp_bind(&self) -> std::io::Result<TcpListener> {
     match self {
       Self { fd: Some(fd), .. } => unsafe { Ok(TcpListener::from_raw_fd(*fd)) },
       Self {
@@ -60,13 +60,39 @@ impl Port {
     }
   }
 
-  /// Create a TCP socket by calling to `.bind()`. If it fails, create a socket
+  /// Create a TCP socket by calling to `.tcp_bind()`. If it fails, create a socket
   /// on `port`.
   ///
   /// Useful to create a default socket to listen to if none was passed.
-  pub fn bind_or(&self, port: u16) -> std::io::Result<TcpListener> {
+  pub fn tcp_bind_or(&self, port: u16) -> std::io::Result<TcpListener> {
     self
-      .bind()
+      .tcp_bind()
       .or_else(|_| TcpListener::bind((self.address.as_str(), port)))
   }
+
+/// Create a UDP socket.
+///
+/// ## Panics
+/// If a file descriptor was passed directly, we call the unsafe
+/// `UdpSocket::from_raw_fd()` method, which may panic if a non-existent file
+/// descriptor was passed.
+  pub fn udp_bind(&self) -> std::io::Result<UdpSocket> {
+    match self {
+      Self { fd: Some(fd), .. } => unsafe { Ok(UdpSocket::from_raw_fd(*fd)) },
+      Self {
+        port: Some(port), ..
+      } => UdpSocket::bind((self.address.as_str(), *port)),
+      _ => Err(io::Error::new(io::ErrorKind::Other, "No port supplied.")),
+    }
+  }
+
+  /// Create a UDP socket by calling to `.udp_bind()`. If it fails, create a socket
+  /// on `port`.
+  ///
+  /// Useful to create a default socket to listen to if none was passed.
+  pub fn udp_bind_or(&self, port: u16) -> std::io::Result<UdpSocket> {
+    self
+      .udp_bind()
+      .or_else(|_| UdpSocket::bind((self.address.as_str(), port)))
+  } 
 }
