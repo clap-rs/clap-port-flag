@@ -8,6 +8,7 @@ Easily add a `--port` flag to CLIs using Structopt.
 - [Crates.io][2]
 
 ## Usage
+### Example: Base
 With the following code in `src/main.rs`:
 
 ```rust
@@ -47,6 +48,47 @@ OPTIONS:
         --listen-fd <fd>         A previously opened network socket. [env: LISTEN_FD=]
     -a, --address <hostname>     The network address to listen to. [default: 127.0.0.1]
     -p, --port <port>            The network port to listen to. [env: PORT=]
+```
+
+### Example: Hyper
+```rust
+extern crate hyper;
+#[macro_use]
+extern crate structopt;
+extern crate clap_port_flag;
+extern crate futures;
+extern crate tokio;
+
+use clap_port_flag::Port;
+use futures::prelude::*;
+use hyper::service::service_fn_ok;
+use hyper::{Body, Response, Server};
+use structopt::StructOpt;
+
+#[derive(Debug, StructOpt)]
+struct Cli {
+  #[structopt(flatten)]
+  port: Port,
+}
+
+fn main() -> Result<(), Box<std::error::Error>> {
+  let args = Cli::from_args();
+  let listener = args.port.bind()?;
+
+  let handle = tokio::reactor::Handle::current();
+  let listener = tokio::net::TcpListener::from_std(listener, &handle)?;
+  let addr = listener.local_addr()?;
+
+  let service = || service_fn_ok(|_| Response::new(Body::from("Hello World")));
+  let server = Server::builder(listener.incoming())
+    .serve(service)
+    .map_err(|e| eprintln!("server error: {}", e));
+
+  println!("Server listening on {}", addr);
+  tokio::run(server);
+
+  Ok(())
+}
 ```
 
 ## Installation
