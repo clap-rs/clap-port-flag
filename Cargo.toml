@@ -10,6 +10,6 @@ readme = "README.md"
 edition = "2021"
 
 [dependencies]
-structopt = "0.2.8"
+clap = { version = "3", features = [ "derive", "env" ] }
 
 [dev-dependencies]
