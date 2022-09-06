@@ -7,13 +7,13 @@ use structopt::StructOpt;
 
 #[derive(Debug, StructOpt)]
 struct Cli {
-  #[structopt(flatten)]
-  port: Port,
+    #[structopt(flatten)]
+    port: Port,
 }
 
 fn main() -> Result<(), std::io::Error> {
-  let args = Cli::from_args();
-  let tcp_listener = args.port.bind_or(8080)?;
-  println!("{:?}", tcp_listener);
-  Ok(())
+    let args = Cli::from_args();
+    let tcp_listener = args.port.bind_or(8080)?;
+    println!("{:?}", tcp_listener);
+    Ok(())
 }
