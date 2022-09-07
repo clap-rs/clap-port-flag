@@ -1,4 +1,5 @@
 # clap-port-flag
+
 [![crates.io version][1]][2] [![build status][3]][4]
 [![downloads][5]][6] [![docs.rs docs][7]][8]
 
@@ -8,7 +9,9 @@ Easily add a `--port` flag to CLIs using clap.
 - [Crates.io][2]
 
 ## Usage
+
 ### Example: Base
+
 With the following code in `src/main.rs`:
 
 ```rust,no_run
@@ -87,20 +90,24 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 ```
 
 ## Installation
+
 ```sh
 $ cargo add clap-port-flag
 ```
 
 ## Further Reading
+
 - [WhatWG URL spec](https://url.spec.whatwg.org/)
 - [nodejs.org/api/url](https://nodejs.org/api/url.html)
 
 ## Acknowledgements
+
 The original version of this crate was sketched out by
 [@TeXitoi](https://github.com/TeXitoi) in
 [rust-lang-nursery/cli-wg#37](https://github.com/rust-lang-nursery/cli-wg/issues/37).
 
 ## License
+
 [MIT](./LICENSE-MIT) OR [Apache-2.0](./LICENSE-APACHE)
 
 [1]: https://img.shields.io/crates/v/clap-port-flag.svg?style=flat-square
