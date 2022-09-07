@@ -59,3 +59,25 @@ impl Port {
             .or_else(|_| TcpListener::bind((self.address.as_str(), port)))
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    use clap::Parser;
+
+    #[derive(Debug, Parser)]
+    struct Cli {
+        #[clap(flatten)]
+        port: Port,
+    }
+
+    #[test]
+    fn test_cli() {
+        let args = Cli::try_parse_from(&["test", "--address", "1.2.3.4", "--port", "1234"]);
+        assert!(args.is_ok(), "Not ok: {:?}", args.unwrap_err());
+        let args = args.unwrap();
+        assert_eq!(args.port.address, "1.2.3.4");
+        assert_eq!(args.port.port, Some(1234));
+    }
+}
