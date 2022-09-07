@@ -17,13 +17,13 @@ use clap_port_flag::Port;
 
 #[derive(Debug, Parser)]
 struct Cli {
-  #[clap(flatten)]
-  port: Port,
+    #[clap(flatten)]
+    port: Port,
 }
 
 fn main() {
-  let args = Cli::parse();
-  let _tcp_listener = args.port.bind().unwrap();
+    let args = Cli::parse();
+    let _tcp_listener = args.port.bind().unwrap();
 }
 ```
 
@@ -58,8 +58,8 @@ use clap::Parser;
 
 #[derive(Debug, Parser)]
 struct Cli {
-  #[clap(flatten)]
-  port: Port,
+    #[clap(flatten)]
+    port: Port,
 }
 
 async fn hello(_: Request<Body>) -> Result<Response<String>, std::convert::Infallible> {
