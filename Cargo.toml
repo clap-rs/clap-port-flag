@@ -9,6 +9,6 @@ authors = ["Yoshua Wuyts <yoshuawuyts@gmail.com>"]
 readme = "README.md"
 
 [dependencies]
-structopt = "0.2.8"
+structopt = "0.3.26"
 
 [dev-dependencies]
