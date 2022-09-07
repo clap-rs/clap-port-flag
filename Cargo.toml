@@ -7,8 +7,12 @@ documentation = "https://docs.rs/clap-port-flag"
 description = "Easily add a --port flag to CLIs using Structopt."
 authors = ["Yoshua Wuyts <yoshuawuyts@gmail.com>"]
 readme = "README.md"
+edition = "2021"
 
 [dependencies]
-structopt = "0.2.8"
+clap = { version = "3", features = [ "derive", "env" ] }
 
 [dev-dependencies]
+futures = "0.3.24"
+hyper = { version = "0.14.20", features = ["server", "http2"] }
+tokio = { version = "1.21.0", features = ["macros", "net", "rt-multi-thread"] }

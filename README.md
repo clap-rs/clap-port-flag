@@ -2,7 +2,7 @@
 [![crates.io version][1]][2] [![build status][3]][4]
 [![downloads][5]][6] [![docs.rs docs][7]][8]
 
-Easily add a `--port` flag to CLIs using Structopt.
+Easily add a `--port` flag to CLIs using clap.
 
 - [Documentation][8]
 - [Crates.io][2]
@@ -11,21 +11,18 @@ Easily add a `--port` flag to CLIs using Structopt.
 ### Example: Base
 With the following code in `src/main.rs`:
 
-```rust
-extern crate clap_port_flag;
-#[macro_use] extern crate structopt;
-
-use structopt::StructOpt;
+```rust,no_run
+use clap::Parser;
 use clap_port_flag::Port;
 
-#[derive(Debug, StructOpt)]
+#[derive(Debug, Parser)]
 struct Cli {
-  #[structopt(flatten)]
+  #[clap(flatten)]
   port: Port,
 }
 
 fn main() {
-  let args = Cli::from_args();
+  let args = Cli::parse();
   let _tcp_listener = args.port.bind().unwrap();
 }
 ```
@@ -51,43 +48,41 @@ OPTIONS:
 ```
 
 ### Example: Hyper
-```rust
-extern crate hyper;
-#[macro_use]
-extern crate structopt;
-extern crate clap_port_flag;
-extern crate futures;
-extern crate tokio;
 
+```rust,no_run
 use clap_port_flag::Port;
 use futures::prelude::*;
-use hyper::service::service_fn_ok;
-use hyper::{Body, Response, Server};
-use structopt::StructOpt;
+use hyper::service::service_fn;
+use hyper::{Body, Response, Request};
+use clap::Parser;
 
-#[derive(Debug, StructOpt)]
+#[derive(Debug, Parser)]
 struct Cli {
-  #[structopt(flatten)]
+  #[clap(flatten)]
   port: Port,
 }
 
-fn main() -> Result<(), Box<std::error::Error>> {
-  let args = Cli::from_args();
-  let listener = args.port.bind()?;
+async fn hello(_: Request<Body>) -> Result<Response<String>, std::convert::Infallible> {
+    Ok(Response::new(String::from("Hello World!")))
+}
 
-  let handle = tokio::reactor::Handle::current();
-  let listener = tokio::net::TcpListener::from_std(listener, &handle)?;
-  let addr = listener.local_addr()?;
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let args = Cli::parse();
+    let listener = args.port.bind()?;
+    let listener = tokio::net::TcpListener::from_std(listener)?;
+    let addr = listener.local_addr()?;
 
-  let service = || service_fn_ok(|_| Response::new(Body::from("Hello World")));
-  let server = Server::builder(listener.incoming())
-    .serve(service)
-    .map_err(|e| eprintln!("server error: {}", e));
+    println!("Server listening on {}", addr);
 
-  println!("Server listening on {}", addr);
-  tokio::run(server);
-
-  Ok(())
+    let (stream, _) = listener.accept().await?;
+    if let Err(e) = hyper::server::conn::Http::new()
+        .serve_connection(stream, service_fn(hello))
+        .await
+    {
+        eprintln!("server error: {}", e);
+    }
+    Ok(())
 }
 ```
 
