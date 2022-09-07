@@ -21,6 +21,7 @@ jobs:
           - beta
         features:
           - addr_with_port
+          - fd
 
     steps:
       - name: Checkout sources
@@ -92,6 +93,7 @@ jobs:
           - beta
         features:
           - addr_with_port
+          - fd
     steps:
       - name: Checkout sources
         uses: actions/checkout@v3

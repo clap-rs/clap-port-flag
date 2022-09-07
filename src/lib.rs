@@ -3,7 +3,10 @@
 #![cfg_attr(test, deny(warnings))]
 
 use std::net::TcpListener;
+
+#[cfg(feature = "fd")]
 use std::os::raw::c_int;
+#[cfg(feature = "fd")]
 use std::os::unix::io::FromRawFd;
 
 /// Easily add a `--port` flag to clap.
@@ -36,6 +39,7 @@ pub struct Port {
     port: Option<u16>,
 
     /// A previously opened network socket.
+    #[cfg(feature = "fd")]
     #[clap(long = "listen-fd", env = "LISTEN_FD", group = "bind")]
     fd: Option<c_int>,
 }
@@ -46,9 +50,11 @@ pub struct Port {
 /// If a file descriptor was passed directly, we call the unsafe
 /// `TcpListener::from_raw_fd()` method, which may panic if a non-existent file
 /// descriptor was passed.
+/// (This only applies if the "fd" feature is enabled)
 impl Port {
     /// Create a TCP socket from the passed in port or file descriptor.
     pub fn bind(&self) -> std::io::Result<TcpListener> {
+        #[cfg(feature = "fd")]
         if let Some(fd) = self.fd {
             return unsafe { Ok(TcpListener::from_raw_fd(fd)) };
         }
