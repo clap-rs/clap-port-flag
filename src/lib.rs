@@ -74,7 +74,7 @@ mod tests {
 
     #[test]
     fn test_cli() {
-        let args = Cli::try_parse_from(&["--address", "1.2.3.4", "--port", "1234"]);
+        let args = Cli::try_parse_from(&["test", "--address", "1.2.3.4", "--port", "1234"]);
         assert!(args.is_ok(), "Not ok: {:?}", args.unwrap_err());
         let args = args.unwrap();
         assert_eq!(args.port.address, "1.2.3.4");
