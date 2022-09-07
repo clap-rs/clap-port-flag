@@ -107,6 +107,7 @@ mod tests {
         port: Port,
     }
 
+    #[cfg(not(feature = "addr_with_port"))]
     #[test]
     fn test_cli() {
         let args = Cli::try_parse_from(&["test", "--address", "1.2.3.4", "--port", "1234"]);
@@ -114,5 +115,18 @@ mod tests {
         let args = args.unwrap();
         assert_eq!(args.port.address, "1.2.3.4");
         assert_eq!(args.port.port, Some(1234));
+    }
+
+    #[cfg(feature = "addr_with_port")]
+    #[test]
+    fn test_cli() {
+        let args = Cli::try_parse_from(&["test", "--address", "1.2.3.4:8080"]);
+        assert!(args.is_ok(), "Not ok: {:?}", args.unwrap_err());
+        let args = args.unwrap();
+        let exp = std::net::SocketAddr::V4(std::net::SocketAddrV4::new(
+            std::net::Ipv4Addr::new(1, 2, 3, 4),
+            8080,
+        ));
+        assert_eq!(args.port.address, exp);
     }
 }
