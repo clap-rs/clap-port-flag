@@ -10,7 +10,7 @@ readme = "README.md"
 edition = "2021"
 
 [dependencies]
-clap = { version = "3", features = [ "derive", "env" ] }
+clap = { version = "4", features = [ "derive", "env" ] }
 
 [dev-dependencies]
 futures = "0.3.24"
