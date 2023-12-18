@@ -14,7 +14,7 @@ clap = { version = "4", features = [ "derive", "env" ] }
 
 [dev-dependencies]
 futures = "0.3.24"
-hyper = { version = "0.14.20", features = ["server", "http2"] }
+hyper = { version = "1.1.0", features = ["server", "http2"] }
 tokio = { version = "1.21.0", features = ["macros", "net", "rt-multi-thread"] }
 
 [features]
